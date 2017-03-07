@@ -14,4 +14,41 @@ RSpec.describe Task, type: :model do
       expect(task.complete).to eq(true)
     end
   end
+
+  describe '#overdue?' do 
+    it 'should return true if deadline is earlier than now' do
+      deadline = Time.now - 1.hour 
+      task = Task.new(deadline:deadline)
+      expect(task.overdue?).to eq(true)
+    end
+
+    it 'should return false if deadline is earlier than now' do
+      deadline = Time.now + 1.hour 
+      task = Task.new(deadline:deadline)
+      expect(task.overdue?).to eq(false)
+    end
+  end
+
+  describe '#increment_priority!' do 
+    it 'should return plus on if less than 10' do 
+      task = Task.new(priority: 2)
+      task.increment_priority!
+      expect(task.priority).to eq(3)
+    end
+
+     it 'shouldn\'t increment above 10' do 
+      task = Task.new(priority: 10)
+      task.increment_priority!
+      expect(task.priority).to eq(10)
+    end
+  end
+
+  describe '#snooze_hour!' do 
+    it 'should add an hour to the current deadline' do 
+      deadline = DateTime.new(2017, 3, 7)
+      task = Task.new(deadline: deadline)
+      task.snooze_hour!
+      expect(task.deadline).to eq(deadline + 1.hour)
+    end
+  end
 end
