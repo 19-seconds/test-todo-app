@@ -2,9 +2,7 @@ class List < ApplicationRecord
   has_many :tasks
 
   def complete_all_tasks!
-    tasks.each do |task|
-      task.update(complete: true)
-    end
+    tasks.update_all(complete: true)
   end
 
   def snooze_all_tasks!
